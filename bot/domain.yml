@@ -1321,6 +1321,31 @@ templates:
         Para lembrar dos assuntos que eu domino, é só digitar: #MEAJUDA :smile:
         Use e Abuse da #
 
+  utter_me_ajuda:
+      - text: |
+        Lei Rouanet
+        - O que é a lei
+        - Quem pode ser proponente
+        - Origem do Dinheiro
+        - Benefícios de Incentivar
+        - Quantidade de Projetos
+        - Quem pode incentivar
+        - Denúncia
+        - Captação
+
+        Processo
+        - Preenchimento
+        - Aprovação
+        - Admissibilidade
+        - Execução
+        - Análise de Resultados
+
+        Salic
+        - como se cadastrar
+        - como recuperar senha
+        - alguns erros do sistema
+
+        Curiosidades
   #TODO
 
   utter_salic:
