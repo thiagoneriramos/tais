@@ -149,3 +149,10 @@
 - como assim
 - e como funciona
 - e como faco isso
+
+## intent:me_ajuda
+- #meajuda
+- #meajude
+- #ajudar
+- #ajuda
+- #ajude

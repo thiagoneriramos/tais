@@ -7,6 +7,7 @@ intents:
   - afirmar_curiosidades
   - afirmar_projeto
   - diga_mais
+  - me_ajuda
 
   - captacao
   - captacao_quando_captar
@@ -740,7 +741,7 @@ templates:
             'implementado, enquanto o Incentivo Fiscal – também chamado de '
             'mecenato – prevaleceu e chega ser confundido com a própria Lei."
 
-  # TO DO
+  #TODO
   utter_definicao:
     - text: |
           Sei conceituar sobre o que é o MinC, Salic, Sefic, proposta, projeto e proponente,
