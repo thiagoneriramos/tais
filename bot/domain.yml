@@ -1189,9 +1189,13 @@ templates:
         Qual o próximo tema te interessa?
 
     - text: |
-        Gostaria te retirar mais alguma dúvida?
-    
+        O que mais você deseja saber?
 
+    - text: |
+        Gostaria te retirar mais alguma dúvida?
+
+    - text: |
+        Espero ter solucionado a sua dúvida, tem mais alguma dúvida?
 
   utter_despedir:
     - text: |
