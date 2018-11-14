@@ -23,15 +23,20 @@ settings = {
             "properties": {
                 "environment":       { "type": "keyword" },
                 "version":           { "type": "keyword" },
-                "user_id":           { "type": "keyword" },
-                "is_bot":            { "type": "boolean" },
-                "text":              { "type": "text" },
-                "tags":              { "type": "keyword" },
+                "sender_id":         { "type": "keyword" },
+                "event":             { "type": "keyword" },
                 "timestamp":         { "type": "date", "format": "yyyy/MM/dd HH:mm:ss" },
+                "name":              { "type": "keyword" },
+                "text":              { "type": "text" },
                 "intent_name":       { "type": "keyword" },
                 "intent_confidence": { "type": "double" },
-                "entities" :         { "type": "keyword" },
-                "utter_name":        { "type": "keyword" },
+                "entities":          { "type": "keyword" },
+                "entities":          { "type": "nested",
+                                       "properties": {
+                                         "name":       { "type": "string" },
+                                         "confidence": { "type": "double" },
+                                       }
+                                     },
                 "is_fallback":       { "type": "boolean" },
             }
         }

@@ -28,6 +28,7 @@ class ElasticSearchBroker(EventChannel):
         self.es = Elasticsearch([host])
 
     def publish(self, event):
+        event = json.loads(event)
         if 'timestamp' in event:
             event['timestamp'] = datetime.datetime.strftime(
                 datetime.datetime.fromtimestamp(event['timestamp']),
