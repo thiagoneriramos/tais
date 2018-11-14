@@ -5,24 +5,14 @@ import datetime
 import hashlib
 import json
 
-from rasa_core.tracker_store import InMemoryTrackerStore
+from rasa_core.broker import EventChannel
 from rasa_core.events import ActionExecuted, BotUttered, UserUttered
 
 from elasticsearch import Elasticsearch
-
-try:
-    from nltk.corpus import stopwords
-except Exception as e:
-    import nltk
-    nltk.download('stopwords')
-    from nltk.corpus import stopwords
-    pass
+from nltk.corpus import stopwords
 
 logger = logging.getLogger(__name__)
 
-es = Elasticsearch([os.getenv('ELASTICSEARCH_URL', 'elasticsearch:9200')])
-
-ENABLE_ANALYTICS = os.getenv('ENABLE_ANALYTICS', 'False').lower() == 'true'
 ENVIRONMENT_NAME = os.getenv('ENVIRONMENT_NAME', 'locahost')
 BOT_VERSION = os.getenv('BOT_VERSION', 'notdefined')
 HASH_GEN = hashlib.md5()
@@ -32,9 +22,26 @@ def gen_id(timestamp):
     _id = HASH_GEN.hexdigest()[10:]
     return _id
 
-class ElasticTrackerStore(InMemoryTrackerStore):
-    def __init__(self, domain=None):
-        super(ElasticTrackerStore, self).__init__(domain)
+class ElasticSearchBroker(EventChannel):
+    def __init__(self, host, username=None, password=None):
+        # TODO http auth
+        self.es = Elasticsearch([host])
+
+    def publish(self, event):
+        if 'timestamp' in event:
+            event['timestamp'] = datetime.datetime.strftime(
+                datetime.datetime.fromtimestamp(event['timestamp']),
+                '%Y/%m/%d %H:%M:%S'
+            )
+        logger.debug('='*80)
+        logger.debug(event)
+        # try:
+        #     self.save_user_message(tracker)
+        #     self.save_bot_message(tracker)
+        # except Exception as ex:
+        #     logger.error('Could not track messages '
+        #                  'for user {}'.format(tracker.sender_id))
+        #     logger.error(str(ex))
 
     def save_user_message(self, tracker):
         if not tracker.latest_message.text:
@@ -71,7 +78,7 @@ class ElasticTrackerStore(InMemoryTrackerStore):
             'is_fallback': False,
         }
 
-        es.index(index='messages', doc_type='message',
+        self.es.index(index='messages', doc_type='message',
                  id='{}_user_{}'.format(ENVIRONMENT_NAME, gen_id(ts)),
                  body=json.dumps(message))
 
@@ -126,18 +133,6 @@ class ElasticTrackerStore(InMemoryTrackerStore):
                 'is_fallback': utter == 'action_default_fallback',
             }
 
-            es.index(index='messages', doc_type='message',
+            self.es.index(index='messages', doc_type='message',
                      id='{}_bot_{}'.format(ENVIRONMENT_NAME, gen_id(ts)),
                      body=json.dumps(message))
-
-    def save(self, tracker):
-        if ENABLE_ANALYTICS:
-            try:
-                self.save_user_message(tracker)
-                self.save_bot_message(tracker)
-            except Exception as ex:
-                logger.error('Could not track messages '
-                             'for user {}'.format(tracker.sender_id))
-                logger.error(str(ex))
-
-        super(ElasticTrackerStore, self).save(tracker)
